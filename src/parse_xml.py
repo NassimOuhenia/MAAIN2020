@@ -1,40 +1,41 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #encoding=utf8
 
 import xml.etree.ElementTree as ET
 import re
-from nltk.corpus import stopwords
-from nltk.tokenize import sent_tokenize, word_tokenize
-import nltk
+
 #nltk.download('punkt')
 
+racine = '<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="fr"></mediawiki>'
+gros = "frwiki.xml"
 file = 'frwikidebut.xml'
-mot = 'musique'
+mot = 'infobox musique'
 pref = '{http://www.mediawiki.org/xml/export-0.10/}'
 out = 'wiki_musique.xml'
 
 #exo 1
 
 def reduire_mot_cle(name_file, mots, out):
+
     tree = ET.parse(name_file)
     root = tree.getroot()
     music=0
     i=0
+
     for page in root.findall(pref+'page'):
+
         txt = page.find(pref+'revision/'+pref+'text').text
-        txt= txt.lower()
-        music=0
+        txt = txt.lower()
+        music = 0
+
         for mot in mots:
             if mot in txt:
-                music+=1
-        if music ==0:
-            root.remove(page)
-    tree.write(out,encoding="utf-8", xml_declaration=None, default_namespace=None, method="xml")
-    print("ok")
+                music += 1
 
-def testReduire():
-    mots3=["infobox musique"]
-    print(reduire_mot_cle2("/home/andressito/Bureau/M2/semestre2/MAAIN/TP1/frwiki.xml",mots3,"outputFinal.xml"))
+        if music == 0:
+            root.remove(page)
+
+    tree.write(out,encoding="utf-8", xml_declaration=None, default_namespace=None, method="xml")
 
 def replace_all(text, dic):
     for i, j in dic.items():
@@ -52,7 +53,7 @@ def cleaning (string):
     string = re.sub('&lt;.*?&gt;', '',string)
     string = re.sub(r'https?:\/\/.*[\r\n]*', '', string, flags=re.MULTILINE)
     string = re.sub('\*',' ',string)
-    string = re.sub('\W',' ',string)
+    string = re.sub('\W','',string)
     #print(string)
     return string
 
@@ -71,7 +72,7 @@ def nettoyage(name):
     stop_words = set(stopwords.words('french'))
     print(stop_words)
     for line in open(name,'r'):
-        line =cleaning(line)
+        line = cleaning(line)
         word_tokens = word_tokenize(line)
         filtered_sentence = [w for w in word_tokens if not w in stop_words]
         filtered_sentence = []
@@ -82,5 +83,23 @@ def nettoyage(name):
     return None
 
 #print(testReduire())
-print(nettoyage("outfevrier.xml"))
+#print(nettoyage("outfevrier.xml"))
 #print(ouvrir2efile())
+def reduction(name_file, out, mot_cle):
+
+    tree = ET.ElementTree()
+    root = ET.fromstring(racine)
+
+    i = 0
+    for event, elem in ET.iterparse(name_file):
+        if elem.tag == pref+'page':
+            txt = elem.find(pref+'revision/'+pref+'text').text
+            if txt:
+                if mot in txt.lower():
+                    root.append(elem)
+                    i += 1
+                    print(i)
+
+    tree._setroot(root)
+    tree.write(out,encoding="utf-8", xml_declaration=None, default_namespace=None, method="xml")
+reduction(gros, out, mot)
