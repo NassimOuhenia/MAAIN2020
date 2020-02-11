@@ -6,7 +6,7 @@ import re
 
 #nltk.download('punkt')
 
-racine = '<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="fr"></mediawiki>'
+racine = '<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="fr">'
 gros = "frwiki.xml"
 file = 'frwikidebut.xml'
 mot = 'infobox musique'
@@ -85,21 +85,20 @@ def nettoyage(name):
 #print(testReduire())
 #print(nettoyage("outfevrier.xml"))
 #print(ouvrir2efile())
+
 def reduction(name_file, out, mot_cle):
 
-    tree = ET.ElementTree()
-    root = ET.fromstring(racine)
-
     i = 0
-    for event, elem in ET.iterparse(name_file):
-        if elem.tag == pref+'page':
-            txt = elem.find(pref+'revision/'+pref+'text').text
-            if txt:
-                if mot in txt.lower():
-                    root.append(elem)
-                    i += 1
-                    print(i)
 
-    tree._setroot(root)
-    tree.write(out,encoding="utf-8", xml_declaration=None, default_namespace=None, method="xml")
+    with open(out, 'w') as o:
+        o.write(racine)
+        for event, elem in ET.iterparse(name_file):
+            if elem.tag == pref+'page':
+                txt = elem.find(pref+'revision/'+pref+'text').text
+                if txt:
+                    if mot_cle in txt.lower():
+                        i += 1
+                        print(i)
+                        o.write(elem.text)
+        o.write('</mediawiki>')
 reduction(gros, out, mot)
