@@ -9,7 +9,7 @@ import re
 racine = '<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="fr">'
 gros = "frwiki.xml"
 file = 'frwikidebut.xml'
-mot = 'infobox musique'
+mot = ['musique', 'cinéma', 'artiste']
 pref = '{http://www.mediawiki.org/xml/export-0.10/}'
 out = 'wiki_musique.xml'
 
@@ -89,16 +89,22 @@ def nettoyage(name):
 def reduction(name_file, out, mot_cle):
 
     i = 0
-
     with open(out, 'w') as o:
         o.write(racine)
         for event, elem in ET.iterparse(name_file):
             if elem.tag == pref+'page':
                 txt = elem.find(pref+'revision/'+pref+'text').text
                 if txt:
-                    if mot_cle in txt.lower():
-                        i += 1
-                        print(i)
-                        o.write(elem.text)
+                    for mot in mot_cle:
+                        if 'infobox '+mot in txt.lower():
+                            elemstr = ET.tostring(elem, encoding="unicode", method="xml")
+                            o.write(elemstr)
+                            i += 1
+                            print(i)
+                            if i == 200000:
+                                break
+
         o.write('</mediawiki>')
+        print('SUCCESS')
+
 reduction(gros, out, mot)
