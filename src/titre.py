@@ -60,3 +60,4 @@ def matriceTitle(file):
     for i in mat:
         print(i)
     print(len(mat))
+    return mat
