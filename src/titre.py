@@ -5,7 +5,7 @@ import numpy as np
 
 racine = '<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="fr"></mediawiki>'
 pref = '{http://www.mediawiki.org/xml/export-0.10/}'
-monFichierPetit='wiki_musique_cinema_artiste.xml'
+monFichierPetit='wiki_musique.xml'
 
 def listeTitre(file):
     title=[]
@@ -20,8 +20,6 @@ def listeTitre(file):
             dicoTitle[txt]=i
             i+=1
             txt1=elem.find(pref+'revision/'+pref+'text').text
-            #avoirLien(txt1)
-            #return None
     return (title,dicoTitle)
 
 def listeTitreParPage(file):
@@ -70,5 +68,36 @@ def matriceTitle(file):
     print('C ',C)
     print('I ',I)
 
+def matriceTitle2(file):
+    liste,dicoTitle=listeTitre(file)
+    L=[]
+    C=[]
+    I=[]
+    mat=[]
+    L.append(0)
+    k=0
+    for event, elem in ET.iterparse(file):
+        if elem.tag == pref+'page':
+            res1=[]
+            txt = elem.find(pref+'revision/'+pref+'text').text
+            m = re.findall(r'\[\[(.*?)\]\]',txt) # les balises
+            for mot in m:
+                if mot in liste and mot not in res1 : res1.append(mot)
+            a=0
+            for j in range(len(liste)):
+                if liste[j] in res1:
+                    I.append(dicoTitle[liste[j]])
+                    a+=1
+                    k+=1
+            L.append(k)
+            if a>0:
+                for b in range(a):
+                    C.append(1/a)
+    print('L ',L)
+    print('C ',C)
+    print('I ',I)
 #print(listeTitre(monFichierPetit))
-matriceTitle(monFichierPetit)
+#matriceTitle(monFichierPetit)
+#print(listeTitreParPage(monFichierPetit))
+print(matriceTitle(monFichierPetit))
+print(matriceTitle2(monFichierPetit))
