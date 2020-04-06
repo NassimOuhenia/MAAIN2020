@@ -1,16 +1,8 @@
 
-
-import sys
-sys.path.append('src/')
-
-import time
-from main import init
 from flask import Flask, render_template, request
 
-engine, titles = init()
 app = Flask(__name__)
 
-@app.route("/")
 @app.route("/index")
 def index():
     return render_template('index.html', length = 0, time = 0, titles = [])
