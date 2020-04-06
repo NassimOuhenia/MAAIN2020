@@ -21,5 +21,3 @@ def response():
     response = engine.generateResponse(request.args['search'], engine.merge)
     temps = round(time.time() - start_time, 4)
     return render_template('index.html', length=len(response),time = temps, titles = [engine.genererLink(titles[id]) for id in response])
-
-app.run(host='0.0.0.0', port=80)
