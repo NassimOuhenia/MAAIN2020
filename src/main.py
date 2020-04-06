@@ -3,10 +3,10 @@ from corpus import Corpus as cpus
 from sEngine import Engine as se
 import time
 
-cltr = '../file/collectorSorted0604.txt'
+cltr = 'file/collectorSorted0604.txt'
 cltr1 = '../file/collectorSorted.txt'
-pg = '../file/prank.txt'
-ttls = '../file/titles.txt'
+pg = 'file/prank.txt'
+ttls = 'file/titles.txt'
 lien = 'https://fr.wikipedia.org/wiki/'
 
 def init():
