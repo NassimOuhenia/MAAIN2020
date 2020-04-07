@@ -10,7 +10,7 @@ class Engine:
 
     #1 mot clé return ids pages
     def first_word(self, mot_cle):
-
+        mot_cle = mot_cle.lower()
         if mot_cle in self.collector.keys():
             return self.collector[mot_cle]
         else:
@@ -73,7 +73,7 @@ class Engine:
         response = []
 
         for mot in request.split():
-            response = f(response, self.first_word(mot.lower()))
+            response = f(response, self.first_word(mot))
 
         return response
 
