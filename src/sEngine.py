@@ -73,7 +73,7 @@ class Engine:
         response = []
 
         for mot in request.split():
-            response = f(response, self.first_word(mot))
+            response = f(response, self.first_word(mot.lower()))
 
         return response
 
