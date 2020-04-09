@@ -23,14 +23,17 @@ class Engine:
         j = 0
 
         while i < len(v1) and j < len(v2):
-            if v1[i] == v2[j]:
-                result.append(v1[i]) #ajout titre page #i
+            rank_v1i = self.pagerank[v1[i]]#poids page id #i
+            rank_v2j = self.pagerank[v2[j]]#poids page id #j
+            if rank_v1i == rank_v2j:
+                if v1[i] == v2[j]:
+                    result.append(v1[i]) #ajout titre page #i
                 i += 1
                 j += 1
-            elif v1[i] < v2[j]:
-                i += 1
+            elif rank_v1i < rank_v2j:
+                j += 1
             else:
-                j += 1
+                i += 1
 
         return result
 
@@ -66,6 +69,36 @@ class Engine:
             result += v2[j:]
 
         return result
+
+    #fusion v1 not v2
+    def not(self, v1, v2):
+        result = []
+        i = 0
+        j = 0
+        lenv1 = len(v1)
+        lenv2 = len(v2)
+
+        while i < lenv1 and j < lenv2:
+
+            rank_v1i = self.pagerank[v1[i]]#poids page id #i
+            rank_v2j = self.pagerank[v2[j]]#poids page id #j
+
+            if rank_v1i == rank_v2j:
+                if v1[i] != v2[j]:
+                    result.append(v1[i])
+                i += 1
+                j += 1
+            elif rank_v2j < rank_v1i:
+                result.append(v1[i])
+                i += 1
+            else:
+                j += 1
+
+        if i < lenv1:
+            result += v1[i:]
+
+        return result
+
 
     #response
     def generateResponse(self, request, f): #f option merge ou intersection
