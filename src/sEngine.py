@@ -18,6 +18,10 @@ class Engine:
 
     #intersection
     def intersect(self, v1, v2):
+
+        if v1 == []:
+            return v2
+            
         result = []
         i = 0
         j = 0

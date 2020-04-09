@@ -18,8 +18,6 @@ def index():
 @app.route("/search", methods = ['GET'])
 def response():
     start_time = time.time()
-    response = engine.generateResponse(request.args['search'], engine.merge)
+    response = engine.generateResponse(request.args['search'], engine.intersect)
     temps = round(time.time() - start_time, 4)
     return render_template('index.html', length=len(response),time = temps, titles = [engine.genererLink(titles[id]) for id in response])
-
-app.run()
