@@ -75,7 +75,7 @@ class Engine:
         return result
 
     #fusion v1 not v2
-    def not(self, v1, v2):
+    def fusion_not(self, v1, v2):
         result = []
         i = 0
         j = 0
