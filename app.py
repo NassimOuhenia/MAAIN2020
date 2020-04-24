@@ -19,6 +19,6 @@ def index():
 def response():
     start_time = time.time()
     q = request.args['search']
-    response = engine.generateResponse(q, engine.merge)
+    response = engine.generateResponse(q, engine.intersect)
     temps = round(time.time() - start_time, 4)
     return render_template('index.html', q = q ,length=len(response),time = temps, titles = [engine.genererLink(titles[id]) for id in response])

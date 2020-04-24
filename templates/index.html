@@ -20,14 +20,14 @@
         <img src="{{url_for('static', filename='univ_paris.png')}}">
       </div>
       <div class="col-lg-4">
-        <img src="{{url_for('static', filename='wikiquick.png')}}">
+        <img src="{{url_for('static', filename='wiquick.png')}}">
       </div>
       <div class="col-lg-8">
         <form action="/search" method="get">
           <div class="input-group">
-            <input type="text" class="form-control" name="search" value="{{q}}" required placeholder="Search...">
+            <input type="text" class="form-control" name="search" value="{{q}}" required placeholder="Quick Search...">
             <div class="input-group-btn">
-              <button class="btn" type="submit">
+              <button class="btn btn-danger" type="submit">
                 Go <span class="glyphicon glyphicon-search"></span>
               </button>
             </div>
