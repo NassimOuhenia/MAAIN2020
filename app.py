@@ -43,8 +43,7 @@ def response():
 
     if per_page < len_pagination:
         len_pagination = per_page
-
-    if len_pagination % per_page != 0:
+    elif size_reponse % 10 != 0:
         len_pagination += 1
 
     #récuperer les titres à envoyer dans le bon format
@@ -53,7 +52,6 @@ def response():
 
     return render_template('index.html', q = q, length = size_reponse, time = temps, titles = all, numbers = pages_number, index = 1)
 
-#pagination per_10
 @app.route("/search/pages", methods = ['GET'])
 def pagination():
 
@@ -70,15 +68,13 @@ def pagination():
         len_pagination = size_reponse//per_page
         if (index+per_page) < len_pagination:
             len_pagination = index + per_page
-
-        if len_pagination % per_page != 0:
+        elif size_reponse % 10 != 0:
             len_pagination += 1
 
         if len_pagination <= index:
             return render_template('index.html', q = "press <", previous = len_pagination)
 
-        pages_number = [i+1 for i in range(index, len_pagination) if i+1 < len_pagination]
-
+        pages_number = [i+1 for i in range(index, len_pagination)]
         #récuperer les titres à envoyer dans le bon format
         all = [engine.genererLink(titles[id]) for id in pages]
 
