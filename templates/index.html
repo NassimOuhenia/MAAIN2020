@@ -20,7 +20,7 @@
       <div class="col-lg-8">
         <form action="/search" method="get">
           <div class="input-group">
-            <input type="text" class="form-control" name="search" value="{{q}}" required placeholder="Quick Search...">
+            <input type="text" class="form-control" name="q" value="{{q}}" required placeholder="Quick Search...">
             <div class="input-group-btn">
               <button class="btn btn-danger" type="submit">
                 Go <span class="glyphicon glyphicon-search"></span>
@@ -34,7 +34,7 @@
     <div style="padding-left: 20%">
       <div class="col-lg-12">
         {% if length %}
-          <h6>{{length}} Résultats en {{time}} secondes</h6>
+          <h6>{% if previous %} Page {{index}} sur environ {% endif %} {{length}} Résultats en {{time}} secondes</h6>
         {% endif %}
         <ul>
           {% for title in titles %}
@@ -51,13 +51,13 @@
         </ul>
         <div class="pagination">
           {% if previous %}
-            <li><a href="/search/pages?page={{previous}}"><</a></li>
+            <li><a href="/searchpages?q={{q}}&page={{previous}}"><</a></li>
           {% endif %}
           {% for page_number in numbers %}
             {% if page_number == index %}
-              <li class="active"><a href="/search/pages?page={{page_number}}">{{page_number}}</a></li>
+              <li class="active"><a href="/searchpages?q={{q}}&page={{page_number}}">{{page_number}}</a></li>
             {%else%}
-              <li><a href="/search/pages?page={{page_number}}">{{page_number}}</a></li>
+              <li><a href="/searchpages?q={{q}}&page={{page_number}}">{{page_number}}</a></li>
             {% endif %}
           {% endfor %}
         </div>

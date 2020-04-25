@@ -20,17 +20,12 @@ def index():
 
 @app.route("/search", methods = ['GET'])
 def response():
-    #global pour accès à la pagination
-    global reponse
-    global q
-    global temps
-    global size_reponse
 
     #generation de la réponse
+    q = request.args['q']
     start_time = time.time()
-    q = request.args['search']
     reponse = engine.generateResponse(q, engine.intersect)
-    temps = round(time.time() - start_time, 4)
+    temps = round(time.time() - start_time, 5)
     size_reponse = len(reponse)
 
     #envoyer juste les 10 premiers résultats
@@ -52,11 +47,19 @@ def response():
 
     return render_template('index.html', q = q, length = size_reponse, time = temps, titles = all, numbers = pages_number, index = 1)
 
-@app.route("/search/pages", methods = ['GET'])
+@app.route("/searchpages", methods = ['GET'])
 def pagination():
 
     try:
+
         index = int(request.args['page']) - 1
+        q = request.args['q']
+
+        #generation de la réponse
+        start_time = time.time()
+        reponse = engine.generateResponse(q, engine.intersect)
+        temps = round(time.time() - start_time, 5)
+        size_reponse = len(reponse)
 
         begin = index*per_page
         end = (index+1)*per_page
@@ -72,7 +75,7 @@ def pagination():
             len_pagination += 1
 
         if len_pagination <= index:
-            return render_template('index.html', q = "press <", previous = len_pagination)
+            return render_template('index.html', length = 0, time = 0, titles = [])
 
         pages_number = [i+1 for i in range(index, len_pagination)]
         #récuperer les titres à envoyer dans le bon format
