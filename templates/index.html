@@ -22,7 +22,7 @@
           <div class="input-group">
             <input type="text" class="form-control" name="q" value="{{q}}" required placeholder="Quick Search...">
             <div class="input-group-btn">
-              <button class="btn btn-danger" type="submit">
+              <button class="btn btn-primary" type="submit">
                 Go <span class="glyphicon glyphicon-search"></span>
               </button>
             </div>
@@ -51,7 +51,7 @@
         </ul>
         <div class="pagination">
           {% if previous %}
-            <li><a href="/searchpages?q={{q}}&page={{previous}}"><</a></li>
+            <li><a href="/searchpages?q={{q}}&page={{previous}}"><<</a></li>
           {% endif %}
           {% for page_number in numbers %}
             {% if page_number == index %}
@@ -60,6 +60,9 @@
               <li><a href="/searchpages?q={{q}}&page={{page_number}}">{{page_number}}</a></li>
             {% endif %}
           {% endfor %}
+          {% if next %}
+            <li><a href="/searchpages?q={{q}}&page={{next}}">>></a></li>
+          {% endif %}
         </div>
       </div>
     </div>

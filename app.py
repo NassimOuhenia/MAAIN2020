@@ -45,7 +45,11 @@ def response():
     all = [engine.genererLink(titles[id]) for id in pages]
     pages_number = [i+1 for i in range(len_pagination)]
 
-    return render_template('index.html', q = q, length = size_reponse, time = temps, titles = all, numbers = pages_number, index = 1)
+    next = None
+    if 2 <= len_pagination:
+        next = 2
+
+    return render_template('index.html', q = q, length = size_reponse, time = temps, titles = all, numbers = pages_number, index = 1, next = next)
 
 @app.route("/searchpages", methods = ['GET'])
 def pagination():
@@ -71,6 +75,7 @@ def pagination():
         len_pagination = size_reponse//per_page
         if (index+per_page) < len_pagination:
             len_pagination = index + per_page
+
         elif size_reponse % 10 != 0:
             len_pagination += 1
 
@@ -81,6 +86,10 @@ def pagination():
         #récuperer les titres à envoyer dans le bon format
         all = [engine.genererLink(titles[id]) for id in pages]
 
-        return render_template('index.html', q = q, length = size_reponse, time = temps, titles = all, numbers = pages_number, previous = index, index = index + 1)
+        next = None
+        if 1 < len(pages_number):
+            next = index + 2
+
+        return render_template('index.html', q = q, length = size_reponse, time = temps, titles = all, numbers = pages_number, previous = index, index = index + 1, next = next)
     except Exception as e:
         return render_template('index.html', length = 0, time = 0, titles = [])
