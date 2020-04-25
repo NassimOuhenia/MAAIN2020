@@ -116,4 +116,4 @@ class Engine:
 
     #lien
     def genererLink(self, title):
-        return re.sub('\s+', '_', title)
+        return re.sub(' ', '_', title)
