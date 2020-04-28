@@ -10,7 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div class="" style="padding-left: 20%; padding-top: 10%">
+    <div style="padding-left: 20%; padding-top: 10%">
       <div class="col-lg-4">
         <img src="{{url_for('static', filename='img/univ_paris.png')}}">
       </div>
@@ -19,13 +19,33 @@
       </div>
       <div class="col-lg-8">
         <form action="/search" method="get">
+
           <div class="input-group">
-            <input type="text" class="form-control" name="q" value="{{q}}" required placeholder="Quick Search...">
+            <div class="input-group-btn">
+              <button type="button" data-toggle="collapse" data-target="#advSearch" class="btn btn-link btn-sm" title="Advanced search">
+                Advanced  <span class="glyphicon glyphicon-chevron-down"></span>
+              </button>
+            </div>
+            <input type="text" class="form-control" name="q" value="{{q}}" placeholder="Quick Search...">
             <div class="input-group-btn">
               <button class="btn btn-primary" type="submit">
                 Go <span class="glyphicon glyphicon-search"></span>
               </button>
             </div>
+          </div>
+          <div style="padding-left: 30%" class="collapse {% if f or opt == 'o' %} show {% endif %}" id="advSearch">
+            <br>
+            <label title="word1 AND word2...." class="radio-inline">
+              <input type="radio" name="opt" value="a" checked>
+              Search AND
+            </label>
+            <label title="word1 OR word2...." class="radio-inline">
+              <input type="radio" name="opt" value="o" {% if opt == 'o' %} checked {% endif %} >
+              Search OR
+            </label>
+            <label title="AND NOT these" class="checkbox-inline">
+              And Not <input type="text" class="form" value="{{f}}" placeholder="NOT these words..." name="f">
+            </label>
           </div>
         </form>
       </div>
@@ -35,11 +55,16 @@
       <div class="col-lg-12">
         {% if length %}
           <h6>{% if previous %} Page {{index}} sur environ {% endif %} {{length}} Résultats en {{time}} secondes</h6>
+          {%else%}
+          {% if time and q %}
+            <br><br><br>
+            <img style="margin-left: 20%; width:450px; height:200px" src="{{url_for('static', filename='img/result-not-found.png')}}">
+          {% endif %}
         {% endif %}
-        <ul>
+        <ul style="list-style:none">
           {% for title in titles %}
             <br>
-            <li>
+            <li  style="list-style:none">
               <a href="https://fr.wikipedia.org/wiki/{{title}}">
                 <h4>
                   {{title}}
@@ -51,17 +76,15 @@
         </ul>
         <div class="pagination">
           {% if previous %}
-            <li><a href="/searchpages?q={{q}}&page={{previous}}"><<</a></li>
+            <li><a href="/searchpages?q={{q}}&opt={{opt}}&f={{f}}&page={{previous}}"><<</a></li>
           {% endif %}
           {% for page_number in numbers %}
-            {% if page_number == index %}
-              <li class="active"><a href="/searchpages?q={{q}}&page={{page_number}}">{{page_number}}</a></li>
-            {%else%}
-              <li><a href="/searchpages?q={{q}}&page={{page_number}}">{{page_number}}</a></li>
-            {% endif %}
+            <li {% if page_number == index %} class="active" {%endif%}>
+              <a href="/searchpages?q={{q}}&opt={{opt}}&f={{f}}&page={{page_number}}">{{page_number}}</a>
+            </li>
           {% endfor %}
           {% if next %}
-            <li><a href="/searchpages?q={{q}}&page={{next}}">>></a></li>
+            <li><a href="/searchpages?q={{q}}&opt={{opt}}&f={{f}}&page={{next}}">>></a></li>
           {% endif %}
         </div>
       </div>

@@ -7,6 +7,7 @@ class Engine:
     def __init__(self, collector = {}, pagerank = []):
         self.collector = collector
         self.pagerank = pagerank
+        self.options = {'a': self.intersect, 'o': self.merge}
 
     #1 mot clé return ids pages
     def first_word(self, mot_cle):
@@ -21,7 +22,7 @@ class Engine:
 
         if v1 == []:
             return v2
-            
+
         result = []
         i = 0
         j = 0
@@ -56,8 +57,7 @@ class Engine:
 
             if rank_v1i == rank_v2j:
                 result.append(v1[i])
-                if v1[i] != v2[j]:
-                    result.append(v2[j])
+
                 i += 1
                 j += 1
             elif rank_v2j < rank_v1i:
@@ -74,7 +74,7 @@ class Engine:
 
         return result
 
-    #fusion v1 not v2
+    #fusion v1 and not v2
     def fusion_not(self, v1, v2):
         result = []
         i = 0
@@ -88,8 +88,7 @@ class Engine:
             rank_v2j = self.pagerank[v2[j]]#poids page id #j
 
             if rank_v1i == rank_v2j:
-                if v1[i] != v2[j]:
-                    result.append(v1[i])
+
                 i += 1
                 j += 1
             elif rank_v2j < rank_v1i:
